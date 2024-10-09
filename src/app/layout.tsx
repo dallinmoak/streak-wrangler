@@ -2,14 +2,20 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
+const mainSerif = localFont({
+  src: "./fonts/Piazzolla-V.ttf",
+  variable: "--font-main-serif",
   weight: "100 900",
 });
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
+
+const mainSans = localFont({
+  src: "./fonts/Montserrat-V.ttf",
+  variable: "--font-main-sans",
+  weight: "100 900",
+});
+const mainMono = localFont({
+  src: "./fonts/SourceCodePro-V.ttf",
+  variable: "--font-main-mono",
   weight: "100 900",
 });
 
@@ -24,9 +30,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang='en'>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${mainSans.variable} ${mainMono.variable} ${mainSerif.variable} antialiased font-[family-name:var(--font-main-sans)]`}
       >
         {children}
       </body>
