@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.layout-body {
+  @apply bg-anti-plum-950 text-anti-plum-50;
+}
+
+.layout-container {
+  @apply bg-anti-plum-900;
+}
