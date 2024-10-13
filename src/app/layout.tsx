@@ -7,7 +7,6 @@ const mainSerif = localFont({
   variable: "--font-main-serif",
   weight: "100 900",
 });
-
 const mainSans = localFont({
   src: "./fonts/Montserrat-V.ttf",
   variable: "--font-main-sans",
@@ -32,9 +31,11 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body
-        className={`${mainSans.variable} ${mainMono.variable} ${mainSerif.variable} antialiased font-[family-name:var(--font-main-sans)]`}
+        className={`${mainSans.variable} ${mainMono.variable} ${mainSerif.variable} antialiased font-[family-name:var(--font-main-sans)] layout-body`}
       >
-        {children}
+        <div className='container mx-auto  h-[100dvh] layout-container'>
+          {children}
+        </div>
       </body>
     </html>
   );
