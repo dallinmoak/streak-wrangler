@@ -3,13 +3,13 @@ import React from "react";
 export default function Footer() {
   return (
     <>
-      <footer className='bg-plum-900 text-anti-plum-50 p-6 mt-8'>
+      <footer className='bg-plum-900 text-anti-plum-50 p-6 mt-8 fixed inset-x-0 bottom-0'>
         {/* Main Content */}
         <div className='flex justify-between items-center'>
           {/* Branding */}
           <div>
             <h1 className='font-serif font-bold text-3xl'>I see you!</h1>
-            <h2 className='text-lg font-light'>Don't touch my copyright!</h2>
+            <h2 className='text-lg font-light'>Flavor text tastes like spray cheese.</h2>
           </div>
 
           {/* Quick Links or Navigation */}
