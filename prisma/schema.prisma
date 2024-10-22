@@ -20,3 +20,11 @@ model User {
 }
 
 
+model Note {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  title    String
+  content  String
+  topicId  String  @db.ObjectId
+
+  @@map("notes")
+}
