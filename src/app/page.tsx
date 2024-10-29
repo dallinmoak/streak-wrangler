@@ -1,7 +1,22 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-export default function Home() {
+import { prismaClient } from "@/lib/prisma";
+
+const prisma = prismaClient();
+
+export default async function Home() {
+
+  const users = await prisma.user.findMany({
+    include: {
+      streaks: {
+        include: {
+          logs: true,
+        },
+      },
+    },
+  });
+
   const streaks = [
     {
       title: "Exercise",
@@ -22,6 +37,7 @@ export default function Home() {
       <Header />
       <div className='mx-auto pt-2 w-[80%]'>
         <div className='text-center'>
+          {JSON.stringify(users)}
           {/* this could be a heading ui component */}
           <h2 className='font-serif text-xl font-bold'>My Streaks</h2>
           <div className='space-y-1.5'>
