@@ -14,17 +14,36 @@ datasource db {
 }
 
 model User {
-  id    String  @id @default(auto()) @map("_id") @db.ObjectId
-  name  String
-  email String @unique
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  name    String
+  streaks Streak[]
 }
 
+model Streak {
+  id      String       @id @default(auto()) @map("_id") @db.ObjectId
+  owner   User         @relation(fields: [ownerId], references: [id])
+  ownerId String       @db.ObjectId
+  config  StreakConfig
+  logs    Log[]
+}
 
-model Note {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  title    String
-  content  String
-  topicId  String  @db.ObjectId
+model Log {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  streak            Streak   @relation(fields: [streakId], references: [id])
+  streakId          String   @db.ObjectId
+  completionDate    DateTime
+  completionDetails Json //format dictated by streak.streakConfig where a value is given for each field in the streakConfig
+}
 
-  @@map("notes")
+type StreakConfig {
+  name           String
+  fields         StreakField[]
+  repeatInterval Json
+}
+
+type StreakField {
+  name        String
+  type        String
+  description String?
+  required    Boolean
 }
