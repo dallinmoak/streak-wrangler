@@ -4,6 +4,7 @@ import "./globals.css";
 import { prismaClient } from "@/lib/prisma";
 
 import UserProvider from "@/components/providers/User";
+import { getCurrent as getCurrentUser } from "@/models/User";
 
 const prisma = prismaClient();
 
@@ -33,7 +34,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = (await prisma.user.findMany())[0];
+  const user = await getCurrentUser();
   return (
     <html lang="en">
       <body
