@@ -1,3 +1,7 @@
+import NewStreakForm from "@/components/client/newStreakForm";
+
 export default function NewStreak() {
-  return <div>new streak form here</div>
+  return (
+    <NewStreakForm />
+  )
 }
