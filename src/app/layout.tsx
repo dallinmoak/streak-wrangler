@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { prismaClient } from "@/lib/prisma";
 
 import UserProvider from "@/components/providers/User";
 import { getCurrent as getCurrentUser } from "@/models/User";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { vars as globalFontVars } from "@/lib/global-fonts";
-
-const prisma = prismaClient();
 
 export const metadata: Metadata = {
   title: "Streak Wrangler app",

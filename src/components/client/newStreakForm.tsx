@@ -7,7 +7,8 @@ export default function NewStreakForm() {
     { id: "new-streak-name", label: "Name", name: "name", required: true },
   ];
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); console.log('submitted')
+    e.preventDefault();
+    console.log('submitted');
   }
 
   return (
