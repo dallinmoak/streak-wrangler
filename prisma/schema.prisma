@@ -20,11 +20,13 @@ model User {
 }
 
 model Streak {
-  id      String       @id @default(auto()) @map("_id") @db.ObjectId
-  owner   User         @relation(fields: [ownerId], references: [id])
-  ownerId String       @db.ObjectId
-  config  StreakConfig
-  logs    Log[]
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  owner       User         @relation(fields: [ownerId], references: [id])
+  ownerId     String       @db.ObjectId
+  config      StreakConfig
+  logs        Log[]
 }
 
 model Log {
@@ -36,7 +38,6 @@ model Log {
 }
 
 type StreakConfig {
-  name           String
   fields         StreakField[]
   repeatInterval Json
 }
