@@ -1,10 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 
-let prisma: PrismaClient;
+const globalForPrisma = global as typeof global & {
+  prisma?: PrismaClient;
+};
 
-export const prismaClient = (): PrismaClient => {
-  if (!prisma) {
-    prisma = new PrismaClient();
-  }
-  return prisma;
+const prisma = globalForPrisma.prisma || new PrismaClient();
+
+if (process.env.NODE_ENV !== "production") {
+  globalForPrisma.prisma = prisma; // Reuse prisma instance in development
 }
+
+export default prisma;
