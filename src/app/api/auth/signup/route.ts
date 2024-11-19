@@ -1,31 +1,31 @@
-import { NextApiRequest, NextApiResponse } from "next";
+// File: src/app/api/auth/signup/route.ts
+import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-import prisma from "../../../../lib/prisma";
+import prisma from "@/lib/prisma";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
-
-  const { username, password, name }: { username: string; password: string; name: string } = req.body;
-
+export async function POST(req: NextRequest) {
   try {
-    // Check if the username is already taken
-    const existingUser = await prisma.user.findUnique({ where: { username } });
+    const { username, password, name } = await req.json();
+
+    // Check if the username already exists
+    const existingUser = await prisma.user.findUnique({
+      where: { username },
+    });
     if (existingUser) {
-      return res.status(400).json({ error: "Username already taken" });
+      return NextResponse.json({ error: "Username already taken" }, { status: 400 });
     }
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create the new user
+    // Create a new user
     const newUser = await prisma.user.create({
       data: { username, password: hashedPassword, name },
     });
 
-    return res.status(201).json({ success: true, userId: newUser.id });
+    return NextResponse.json({ success: true, userId: newUser.id }, { status: 201 });
   } catch (error) {
-    return res.status(500).json({ error: "Something went wrong" });
+    console.error("Error in signup:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
