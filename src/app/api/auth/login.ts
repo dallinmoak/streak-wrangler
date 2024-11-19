@@ -1,10 +1,7 @@
-// File: pages/api/auth/login.ts
-// Handles user login by verifying credentials and issuing a JWT.
-
 import { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import prisma from "../../lib/prisma";
+import prisma from "../../../lib/prisma";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
