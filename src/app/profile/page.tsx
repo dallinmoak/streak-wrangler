@@ -1,5 +1,5 @@
 // File: src/app/profile/page.tsx
-// Test page for user signup and login forms
+// Profile page for user signup and login forms
 
 "use client";
 
@@ -61,11 +61,22 @@ export default function ProfilePage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(loginData),
     });
-    const result = await res.json();
-    if (res.ok) {
-      setMessage(`Login successful! Token: ${result.token}`);
-    } else {
-      setMessage(`Login failed: ${result.error}`);
+
+    // Log the response for debugging
+    const rawResponse = await res.text();
+    console.log("Raw response:", rawResponse);
+
+    try {
+      const result = JSON.parse(rawResponse);
+      if (res.ok) {
+        setMessage(`Login successful! Token: ${result.token}`);
+        localStorage.setItem("token", result.token);
+      } else {
+        setMessage(`Login failed: ${result.error}`);
+      }
+    } catch (err) {
+      console.error("Error parsing JSON:", err);
+      setMessage("Failed to parse server response");
     }
   };
 
@@ -76,6 +87,7 @@ export default function ProfilePage() {
         <div className="mb-4 p-2 bg-gray-200 text-black">{message}</div>
       )}
 
+      {/* Signup Form */}
       <div className="mb-8">
         <h2 className="text-xl font-bold text-black">Signup Form</h2>
         <form onSubmit={handleSignup} className="space-y-4">
@@ -111,6 +123,37 @@ export default function ProfilePage() {
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
             Sign Up
+          </button>
+        </form>
+      </div>
+
+      {/* Login Form */}
+      <div>
+        <h2 className="text-xl font-bold text-black">Login Form</h2>
+        <form onSubmit={handleLogin} className="space-y-4">
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            value={loginData.username}
+            onChange={(e) => handleInputChange(e, "login")}
+            required
+            className="w-full p-2 border border-gray-300 rounded text-black"
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={loginData.password}
+            onChange={(e) => handleInputChange(e, "login")}
+            required
+            className="w-full p-2 border border-gray-300 rounded text-black"
+          />
+          <button
+            type="submit"
+            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+          >
+            Log In
           </button>
         </form>
       </div>
