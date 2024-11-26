@@ -1,5 +1,7 @@
 "use client";
 import { FormFieldData } from "@/types/all";
+import { useRef } from "react";
+
 export default function FormField({ fieldData }: { fieldData: FormFieldData }) {
   const {
     label,
@@ -9,8 +11,11 @@ export default function FormField({ fieldData }: { fieldData: FormFieldData }) {
     required = false,
     placeholder = fieldData.name,
     disabled = false,
-    defaultValue = "",
+    value,
+    onChange,
   } = fieldData;
+
+  const ref = fieldData.ref ?? useRef(null);
 
   const labelEl = (
     <label className="mb-1" htmlFor={id}>
@@ -43,8 +48,10 @@ export default function FormField({ fieldData }: { fieldData: FormFieldData }) {
           id={id}
           name={name}
           required={required}
-          defaultValue={defaultValue}
+          value={value}
           disabled={disabled}
+          onChange={(e) => onChange && onChange(e, ref)}
+          ref={ref}
         >
           <option value="" disabled>
             Select an option
@@ -62,8 +69,10 @@ export default function FormField({ fieldData }: { fieldData: FormFieldData }) {
           name={name}
           required={required}
           placeholder={placeholder ?? ""}
-          defaultValue={defaultValue}
+          value={value}
           disabled={disabled}
+          onChange={(e) => onChange && onChange(e, ref)}
+          ref={ref}
         />
       </Wrapper>
     );
@@ -77,8 +86,10 @@ export default function FormField({ fieldData }: { fieldData: FormFieldData }) {
         name={name}
         required={required}
         placeholder={placeholder ?? ""}
-        defaultValue={defaultValue}
+        value={value}
         disabled={disabled}
+        onChange={(e) => onChange && onChange(e, ref)}
+        ref={ref}
       />
     </Wrapper>
   );

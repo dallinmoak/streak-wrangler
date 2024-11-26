@@ -4,9 +4,11 @@ type FormFieldDataBase = {
   name: string;
   type?: string;
   required?: boolean;
-  defaultValue?: string;
+  value: string;
   disabled?: boolean;
   placeholder?: string;
+  onChange?: (e: any, ref: any) => void
+  ref?: any;
 };
 
 type HasSelect = {

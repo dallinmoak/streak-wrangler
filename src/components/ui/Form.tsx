@@ -1,6 +1,5 @@
 import { FormFieldData } from "@/types/all";
 import FormField from "./FormField";
-
 import { ReactNode } from "react";
 
 export default function Form({
@@ -13,8 +12,14 @@ export default function Form({
   return (
     <form className="w-4/5 max-w-[30rem] mx-auto" onSubmit={submitHandler}>
       {fieldsData.map((datum, index) => {
-        if ((datum as FormFieldData).id !== undefined) {
-          return <FormField key={index} fieldData={datum as FormFieldData} />;
+        const ffDatum = datum as FormFieldData;
+        if (ffDatum.id !== undefined) {
+          return (
+            <FormField
+              key={index}
+              fieldData={ffDatum}
+            />
+          );
         } else {
           return <div key={index}>{datum as ReactNode}</div>;
         }
