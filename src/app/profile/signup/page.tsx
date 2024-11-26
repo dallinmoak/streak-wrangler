@@ -42,7 +42,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="bg-plum-100 min-h-screen flex flex-col items-center justify-center text-plum-900 p-6">
+    <div className="bg-plum-100 min-h-screen flex flex-col items-center justify-start text-plum-900 p-6">
       <h1 className="text-3xl font-bold font-serif mb-6">Create an Account</h1>
 
       {/* Message Section */}

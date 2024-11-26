@@ -4,7 +4,7 @@ import React from "react";
 
 export default function LandingPage() {
   return (
-    <div className="bg-plum-100 min-h-screen flex flex-col items-center justify-center text-plum-900">
+    <div className="bg-plum-100 min-h-screen flex flex-col items-center justify-start text-plum-900 p-6">
       {/* Main Content */}
       <h1 className="text-4xl font-bold font-serif mb-6">
         Welcome to Streak Wrangler
