@@ -32,7 +32,7 @@ export default function Header() {
           </a>
           {/* Profile Button */}
           <a
-            href="#profile"
+            href="profile"
             className="text-anti-plum-50 hover:text-plum-400 focus:outline-none focus:ring-2 focus:ring-plum-400 rounded"
             aria-label="Profile"
           >
