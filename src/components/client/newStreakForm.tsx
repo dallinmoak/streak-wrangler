@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef, RefObject, SetStateAction } from "react";
+import { useState, useEffect, useRef, RefObject, SetStateAction, ReactNode } from "react";
 import Form from "../ui/Form";
 import { FormFieldData, FieldSet, UserFieldSet } from "@/types/all";
 import FormField from "../ui/FormField";
@@ -177,54 +177,54 @@ export default function NewStreakForm() {
     console.log(newStreak);
   };
 
-  return (
-    <>
-      <form className="w-4/5 max-w-[30rem] mx-auto" onSubmit={handleSubmit}>
-        {fieldSets?.map((fieldSet, index) => {
-          if ((fieldSet as UserFieldSet).userFieldSet) {
-            const { userFieldSet, userFieldIndex, fields } = fieldSet as UserFieldSet;
+  const FormNodes: ReactNode[] = [...fieldSets?.map((fieldSet, index) => {
+    if ((fieldSet as UserFieldSet).userFieldSet) {
+      const { userFieldSet, userFieldIndex, fields } = fieldSet as UserFieldSet;
+      return (
+        <div key={index} className="border-2 rounded-lg border-current p-2 bg-anti-plum-950 flex flex-row flex-wrap space-x-4">
+          <h2>User Field {userFieldIndex}</h2>
+          {fields.map((field, fIndex) => {
+            const fieldData = {
+              ...field,
+              onChange: (val: string, ref: RefObject<any>) => {
+                updateFeildSet(index, field.id, val, ref);
+                setCurrentFocusRef(ref);
+              },
+            }
             return (
-              <div key={index} className="border-2 rounded-lg border-current p-2 bg-anti-plum-950 flex flex-row flex-wrap space-x-4">
-                <h2>User Field {userFieldIndex}</h2>
-                {fields.map((field, fIndex) => {
-                  const fieldData = {
-                    ...field,
-                    onChange: (val: string, ref: RefObject<any>) => {
-                      updateFeildSet(index, field.id, val, ref);
-                      setCurrentFocusRef(ref);
-                    },
-                  }
-                  return (
-                    <div key={fIndex}>
-                      <FormField fieldData={fieldData} />
-                    </div>
-                  )
-                })}
-                <button onClick={removeUserField(index)} type='button'>➖ remove user field</button>
+              <div key={fIndex}>
+                <FormField fieldData={fieldData} />
               </div>
             )
-          } else {
-            return (
-              fieldSet.fields.map((field, fIndex) => {
-                const fieldData = {
-                  ...field,
-                  onChange: (val: string, ref: RefObject<any>) => {
-                    updateFeildSet(index, field.id, val, ref);
-                    setCurrentFocusRef(ref);
-                  },
-                }
-                return (
-                  <div key={fIndex}>
-                    <FormField fieldData={fieldData} />
-                  </div>
-                )
-              })
-            )
+          })}
+          <button onClick={removeUserField(index)} type='button'>➖ remove user field</button>
+        </div>
+      )
+    } else {
+      return (
+        fieldSet.fields.map((field, fIndex) => {
+          const fieldData = {
+            ...field,
+            onChange: (val: string, ref: RefObject<any>) => {
+              updateFeildSet(index, field.id, val, ref);
+              setCurrentFocusRef(ref);
+            },
           }
-        })}
-        <button onClick={addUserField} >➕ add user field</button>
-        <button type="submit">Submit</button>
-      </form>
+          return (
+            <div key={fIndex}>
+              <FormField fieldData={fieldData} />
+            </div>
+          )
+        })
+      )
+    }
+  }),
+  <button onClick={addUserField} >➕ add user field</button>
+  ];
+
+  return (
+    <>
+      <Form fieldsData={FormNodes} submitHandler={handleSubmit} />
       {/* {fieldSets.map((fieldSet, index) => {
         return (
           <div>
