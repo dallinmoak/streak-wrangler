@@ -50,7 +50,7 @@ export default function FormField({ fieldData }: { fieldData: FormFieldData }) {
           required={required}
           value={value}
           disabled={disabled}
-          onChange={(e) => onChange && onChange(e, ref)}
+          onChange={(e) => onChange && onChange(e.target.value, ref)}
           ref={ref}
         >
           <option value="" disabled>
@@ -71,7 +71,24 @@ export default function FormField({ fieldData }: { fieldData: FormFieldData }) {
           placeholder={placeholder ?? ""}
           value={value}
           disabled={disabled}
-          onChange={(e) => onChange && onChange(e, ref)}
+          onChange={(e) => onChange && onChange(e.target.value, ref)}
+          ref={ref}
+        />
+      </Wrapper>
+    );
+  } else if (type == "checkbox") {
+    return (
+      <Wrapper>
+        <input
+          className={inputClasses}
+          type={type}
+          id={id}
+          name={name}
+          required={required}
+          placeholder={placeholder ?? ""}
+          checked={value === "true"}
+          disabled={disabled}
+          onChange={(e) => onChange && onChange(e.target.checked.toString(), ref)}
           ref={ref}
         />
       </Wrapper>
@@ -88,7 +105,7 @@ export default function FormField({ fieldData }: { fieldData: FormFieldData }) {
         placeholder={placeholder ?? ""}
         value={value}
         disabled={disabled}
-        onChange={(e) => onChange && onChange(e, ref)}
+        onChange={(e) => onChange && onChange(e.target.value, ref)}
         ref={ref}
       />
     </Wrapper>

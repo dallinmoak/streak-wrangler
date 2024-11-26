@@ -1,22 +1,11 @@
 "use client";
 import { useState, useEffect, useRef, RefObject, SetStateAction } from "react";
 import Form from "../ui/Form";
-import { FormFieldData } from "@/types/all";
+import { FormFieldData, FieldSet, UserFieldSet } from "@/types/all";
 import FormField from "../ui/FormField";
 import { Streak } from "@prisma/client";
 
 export default function NewStreakForm() {
-
-  type FieldSet = baseFieldSet | UserFieldSet;
-
-  type baseFieldSet = {
-    fields: FormFieldData[];
-  };
-
-  type UserFieldSet = baseFieldSet & {
-    userFieldSet: boolean;
-    userFieldIndex: number;
-  };
 
   const [fieldSets, setFieldSets] = useState<FieldSet[]>([
     {
@@ -74,7 +63,7 @@ export default function NewStreakForm() {
         ref.current.setSelectionRange(ref.current.value.length, ref.current.value.length);
       }
     };
-    if (currentFocusRef) {
+    if (currentFocusRef?.current) {
       focusField(currentFocusRef);
     }
   }, [fieldSets]);
@@ -135,13 +124,19 @@ export default function NewStreakForm() {
           label: "Required",
           name: `user-field-${userFieldIndex}-required`,
           type: "checkbox",
-          value: "",
+          value: "false",
         },
       ],
       userFieldSet: true,
       userFieldIndex,
     };
     setFieldSets([...fieldSets, newUserFieldSet]);
+  }
+
+  const removeUserField = (index: number) => () => {
+    const workingFieldSets = [...fieldSets];
+    workingFieldSets.splice(index, 1);
+    setFieldSets(workingFieldSets);
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -184,28 +179,65 @@ export default function NewStreakForm() {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form className="w-4/5 max-w-[30rem] mx-auto" onSubmit={handleSubmit}>
         {fieldSets?.map((fieldSet, index) => {
-          return (
-            fieldSet.fields.map((field, fIndex) => {
-              const fieldData = {
-                ...field,
-                onChange: (e: any, ref: RefObject<any>) => {
-                  updateFeildSet(index, field.id, e.target.value, ref);
-                  setCurrentFocusRef(ref);
-                },
-              }
-              return (
-                <div key={fIndex}>
-                  <FormField fieldData={fieldData} />
-                </div>
-              )
-            })
-          )
+          if ((fieldSet as UserFieldSet).userFieldSet) {
+            const { userFieldSet, userFieldIndex, fields } = fieldSet as UserFieldSet;
+            return (
+              <div key={index} className="border-2 rounded-lg border-current p-2 bg-anti-plum-950 flex flex-row flex-wrap space-x-4">
+                <h2>User Field {userFieldIndex}</h2>
+                {fields.map((field, fIndex) => {
+                  const fieldData = {
+                    ...field,
+                    onChange: (val: string, ref: RefObject<any>) => {
+                      updateFeildSet(index, field.id, val, ref);
+                      setCurrentFocusRef(ref);
+                    },
+                  }
+                  return (
+                    <div key={fIndex}>
+                      <FormField fieldData={fieldData} />
+                    </div>
+                  )
+                })}
+                <button onClick={removeUserField(index)} type='button'>➖ remove user field</button>
+              </div>
+            )
+          } else {
+            return (
+              fieldSet.fields.map((field, fIndex) => {
+                const fieldData = {
+                  ...field,
+                  onChange: (val: string, ref: RefObject<any>) => {
+                    updateFeildSet(index, field.id, val, ref);
+                    setCurrentFocusRef(ref);
+                  },
+                }
+                return (
+                  <div key={fIndex}>
+                    <FormField fieldData={fieldData} />
+                  </div>
+                )
+              })
+            )
+          }
         })}
         <button onClick={addUserField} >➕ add user field</button>
         <button type="submit">Submit</button>
       </form>
+      {/* {fieldSets.map((fieldSet, index) => {
+        return (
+          <div>
+            {fieldSet.fields.map((field, fIndex) => {
+              return (
+                <div key={fIndex}>
+                  {field.id}: {field.value}
+                </div>
+              )
+            })}
+          </div>
+        )
+      })} */}
     </>
   );
 }
