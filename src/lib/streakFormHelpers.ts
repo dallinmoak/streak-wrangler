@@ -95,7 +95,7 @@ export const newUserFieldSetDefaults = (userFieldIndex: string): UserFieldSet =>
   }
 }
 
-export const buildStreakObject = (formData: FormData): Streak => {
+export const buildStreakObject = (formData: FormData, ownerId: string): Streak => {
   const defaultInterval = "1";
   const defaultIntervalUnit = "days";
   const formDataObj = Object.fromEntries(
@@ -113,6 +113,14 @@ export const buildStreakObject = (formData: FormData): Streak => {
 
   const userFieldsData = userFieldIds.map((id) => {
     const name = formDataObj[`user-field-${id}-label`] as string;
+    // const rawType = formDataObj[`user-field-${id}-type`] as string;
+    // const typeMap = {
+    //   tap: "checkbox",
+    //   duration: "number",
+    //   count: "number",
+    //   text: "text",
+    // }
+    // const type = typeMap[rawType as keyof typeof typeMap];
     const type = formDataObj[`user-field-${id}-type`] as string;
     const description = formDataObj[`user-field-${id}-description`] as string;
     const required = formDataObj[`user-field-${id}-required`] === "";
@@ -120,7 +128,7 @@ export const buildStreakObject = (formData: FormData): Streak => {
   });
   const newStreak: Streak = {
     id: "",
-    ownerId: "",
+    ownerId,
     name: formDataObj.name as string,
     description: formDataObj.description as string,
     config: {

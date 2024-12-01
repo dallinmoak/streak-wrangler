@@ -1,10 +1,11 @@
 "use client";
-import { useState, useEffect, RefObject, ReactNode } from "react";
+import { useState, useEffect, RefObject, ReactNode, useContext } from "react";
 import Form from "../ui/Form";
 import { FieldSet, UserFieldSet } from "@/types/all";
 import FormField from "../ui/FormField";
 import { Streak } from "@prisma/client";
 import { buildStreakObject, newStreakFormInitialFields, newUserFieldSetDefaults } from "@/lib/streakFormHelpers";
+import UserContext from "@/lib/context/UserContext";
 
 export default function NewStreakForm() {
 
@@ -49,11 +50,30 @@ export default function NewStreakForm() {
     setFieldSets(workingFieldSets);
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const currentUserId = useContext(UserContext)?.id;
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const newStreak: Streak = buildStreakObject(formData);
+    const newStreak: Streak = buildStreakObject(formData, currentUserId ?? "");
     console.log(newStreak);
+    const res = await fetch('/api/streak', {
+      method: 'POST',
+      body: JSON.stringify(newStreak),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    if (res.ok) {
+      const newStreak = await res.json();
+      console.log('new streak saved', newStreak);
+      console.log('resetting form');
+      setFieldSets(newStreakFormInitialFields);
+    } else {
+      const errorMsg = await res.text();
+      console.log(errorMsg);
+      console.error('failed to save new streak');
+    }
   };
 
   const fieldSetNodes = (fieldSet: FieldSet, setIndex: number) => {
