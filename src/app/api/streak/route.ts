@@ -4,7 +4,7 @@ export async function POST(request: Request) {
   try {
     const streak = await request.json();
     const newStreak = await create(streak);
-    console.log('new streak', newStreak);
+    // console.log('new streak', newStreak);
     return new Response(JSON.stringify(newStreak), {
       headers: { "content-type": "application/json" },
     });
