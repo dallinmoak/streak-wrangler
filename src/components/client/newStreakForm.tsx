@@ -6,10 +6,14 @@ import FormField from "../ui/FormField";
 import { Streak } from "@prisma/client";
 import { buildStreakObject, newStreakFormInitialFields, newUserFieldSetDefaults } from "@/lib/streakFormHelpers";
 import UserContext from "@/lib/context/UserContext";
+import cloneDeep from "lodash/cloneDeep";
 
 export default function NewStreakForm() {
 
-  const [fieldSets, setFieldSets] = useState<FieldSet[]>(newStreakFormInitialFields);
+  const initialSet = cloneDeep(newStreakFormInitialFields);
+  const [fieldSets, setFieldSets] = useState<FieldSet[]>(initialSet);
+
+  const [submissionMessage, setSubmissionMessage] = useState<string>('');
 
   const [currentFocusRef, setCurrentFocusRef] = useState<React.RefObject<any>>();
 
@@ -24,6 +28,13 @@ export default function NewStreakForm() {
       focusField(currentFocusRef);
     }
   }, [fieldSets]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setSubmissionMessage('');
+    }, 3000);
+    return () => clearTimeout(timeout);
+  }, [submissionMessage])
 
   const updateFeildSet = ((setIndex: number, fieldId: string, value: string, ref: React.RefObject<any>) => {
     const workingFieldSets = [...fieldSets];
@@ -68,7 +79,9 @@ export default function NewStreakForm() {
       const newStreak = await res.json();
       console.log('new streak saved', newStreak);
       console.log('resetting form');
+      console.log(newStreakFormInitialFields)
       setFieldSets(newStreakFormInitialFields);
+      setSubmissionMessage('Streak saved');
     } else {
       const errorMsg = await res.text();
       console.log(errorMsg);
@@ -97,9 +110,11 @@ export default function NewStreakForm() {
     if ((fieldSet as UserFieldSet).userFieldSet) {
       const { userFieldIndex } = fieldSet as UserFieldSet;
       return (
-        <div key={index} className="border-2 rounded-lg border-current p-2 bg-anti-plum-950 flex flex-row flex-wrap space-x-4">
+        <div key={index} className="border-2 rounded-lg border-current p-2 bg-anti-plum-950 space-x-4">
           <h2>User Field {userFieldIndex}</h2>
-          {fieldSetNodes(fieldSet, index)}
+          <div className="flex flex-row flex-wrap gap-x-4 mb-1">
+            {fieldSetNodes(fieldSet, index)}
+          </div>
           <button onClick={removeUserField(index)} type='button'>➖ remove user field</button>
         </div>
       )
@@ -112,6 +127,7 @@ export default function NewStreakForm() {
 
   return (
     <>
+      {submissionMessage && <p>{submissionMessage}</p>}
       <Form fieldsData={FormNodes} submitHandler={handleSubmit} />
     </>
   );

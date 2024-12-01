@@ -10,7 +10,7 @@ export default function Form({
   submitHandler: (e: React.FormEvent<HTMLFormElement>) => void;
 }) {
   return (
-    <form className="w-4/5 max-w-[30rem] mx-auto" onSubmit={submitHandler}>
+    <form className="w-4/5 max-w-[35rem] mx-auto space-y-2" onSubmit={submitHandler}>
       {fieldsData.map((datum, index) => {
         const ffDatum = datum as FormFieldData;
         if (ffDatum.id !== undefined) {

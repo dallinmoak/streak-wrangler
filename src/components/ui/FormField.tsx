@@ -24,7 +24,7 @@ export default function FormField({ fieldData }: { fieldData: FormFieldData }) {
   );
   const Wrapper = ({ children }: { children: React.ReactNode }) => {
     return (
-      <div className="flex flex-col mb-4 max-w-64">
+      <div className="flex flex-col max-w-64">
         {labelEl}
         {children}
       </div>
