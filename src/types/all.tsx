@@ -4,7 +4,7 @@ type FormFieldDataBase = {
   name: string;
   type?: string;
   required?: boolean;
-  value: string;
+  value?: string;
   disabled?: boolean;
   placeholder?: string;
   onChange?: (val: string, ref: any) => void
