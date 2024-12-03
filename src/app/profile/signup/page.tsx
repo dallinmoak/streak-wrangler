@@ -24,7 +24,7 @@ export default function SignUpPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(signupData),
     });
-
+//hmm
     const rawResponse = await res.text();
     console.log("Raw response:", rawResponse);
 
