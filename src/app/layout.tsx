@@ -24,9 +24,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         layout-body`}
       >
         <UserProvider user={user}>
-          <div className="container mx-auto  h-[100dvh] layout-container">
+          <div className="container mx-auto min-h-[100dvh] layout-container h-fit flex flex-col justify-between">
             <Header />
-            {children}
+            <div className="flex-grow">
+              {children}
+            </div>
             <Footer />
           </div>
         </UserProvider>

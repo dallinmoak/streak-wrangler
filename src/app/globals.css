@@ -9,3 +9,7 @@
 .layout-container {
   @apply bg-anti-plum-900;
 }
+
+button {
+  @apply bg-anti-plum-800 text-anti-plum-50 rounded-xl p-1 hover:outline outline-2 outline-anti-plum-200;
+}

@@ -3,7 +3,7 @@ import React from "react";
 export default function Footer() {
   return (
     <>
-      <footer className='bg-plum-900 text-anti-plum-50 p-6 mt-8 fixed inset-x-0 bottom-0'>
+      <footer className='bg-plum-900 text-anti-plum-50 p-6 mt-8'>
         {/* Main Content */}
         <div className='flex justify-between items-center'>
           {/* Branding */}
