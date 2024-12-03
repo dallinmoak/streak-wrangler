@@ -1,3 +1,4 @@
+import NewLogForm from "@/components/log/NewLogForm";
 import { getById } from "@/models/Streak";
 
 export default async function Page({
@@ -27,6 +28,8 @@ export default async function Page({
           )
         })}
       </ul>
+      <hr />
+      <NewLogForm fields={streak.config.fields} />
     </div>
   );
 };
