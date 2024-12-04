@@ -1,6 +1,7 @@
 import { getCurrent as getCurrentUser } from "@/models/User"
 import { getByUserId as getStreaksByUserId } from "@/models/Streak";
 import HomeActionItem from "../ui/HomeActionItem";
+import Link from "next/link";
 
 export default async function StreakList() {
 	const id = (await getCurrentUser()).id;
@@ -13,10 +14,12 @@ export default async function StreakList() {
 					<>
 						<ul className="text-left">
 							<li>
-								<HomeActionItem>
-									<h3 className="font-serif">{streak.name}</h3>
-									<p className="text-xs">{streak.description ?? ""}</p>
-								</HomeActionItem>
+								<Link href={`/streak/${streak.id}`}>
+									<HomeActionItem>
+										<h3 className="font-serif">{streak.name}</h3>
+										<p className="text-xs">{streak.description ?? ""}</p>
+									</HomeActionItem>
+								</Link>
 							</li>
 						</ul>
 					</>

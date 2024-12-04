@@ -77,20 +77,23 @@ export default function FormField({ fieldData }: { fieldData: FormFieldData }) {
       </Wrapper>
     );
   } else if (type == "checkbox") {
+    const inputAttrs: Record<string, any> = {
+      className: inputClasses,
+      type: type,
+      id: id,
+      name: name,
+      required: required,
+      placeholder: placeholder ?? "",
+      disabled: disabled,
+      onChange: (e: any) => onChange && onChange(e.target.checked.toString(), ref),
+      ref: ref,
+    }
+    if (value != undefined) {
+      inputAttrs["checked"] = value == "true";
+    }
     return (
       <Wrapper>
-        <input
-          className={inputClasses}
-          type={type}
-          id={id}
-          name={name}
-          required={required}
-          placeholder={placeholder ?? ""}
-          checked={value === "true"}
-          disabled={disabled}
-          onChange={(e) => onChange && onChange(e.target.checked.toString(), ref)}
-          ref={ref}
-        />
+        <input {...inputAttrs} />
       </Wrapper>
     );
   }
