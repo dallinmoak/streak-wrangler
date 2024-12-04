@@ -6,21 +6,29 @@ import Form from "../ui/Form";
 
 export default function NewLogForm({ fields }: { fields: StreakField[] }) {
 
+  const toCamelCase = (str: string) => {
+    return str
+      .replace(/\s(.)/g, (match, group1) => group1.toUpperCase())
+      .replace(/\s/g, '')
+      .replace(/\./g, '')
+      .replace(/^(.)/, (match, group1) => group1.toLowerCase());
+  };
+
+  const fieldTypeMap: Record<string, string> = {
+    "tap": "checkbox",
+    "duration": "number",
+    "count": "number",
+    "text": "text",
+  }
+
   const initialFields: FormFieldData[] = fields.map((field: any, index: number) => {
-    const toCamelCase = (str: string) => {
-      return str
-        .replace(/\s(.)/g, (match, group1) => group1.toUpperCase())
-        .replace(/\s/g, '')
-        .replace(/\./g, '')
-        .replace(/^(.)/, (match, group1) => group1.toLowerCase());
-    };
     const id = `${index}-${toCamelCase(field.name)}`;
 
     return {
       id,
       label: field.name,
       name: id,
-      type: field.type,
+      type: fieldTypeMap[field.type],
       placeholder: field.description,
       required: false,
     }
