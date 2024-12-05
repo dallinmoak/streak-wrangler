@@ -13,3 +13,15 @@
 button {
   @apply bg-anti-plum-800 text-anti-plum-50 rounded-xl p-1 hover:outline outline-2 outline-anti-plum-200;
 }
+
+h1 {
+  @apply text-4xl font-bold font-serif mb-6
+}
+
+h2 {
+  @apply text-3xl font-bold font-serif mb-1
+}
+
+h3 {
+  @apply text-2xl font-bold font-serif mb-1
+}

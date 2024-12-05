@@ -6,9 +6,7 @@ export default function LandingPage() {
   return (
     <div className="bg-plum-100 min-h-screen flex flex-col items-center justify-start text-plum-900 p-6">
       {/* Main Content */}
-      <h1 className="text-4xl font-bold font-serif mb-6">
-        Welcome to Streak Wrangler
-      </h1>
+      <h1>Welcome to Streak Wrangler</h1>
       <p className="text-lg font-light mb-8">You're not currently signed in.</p>
 
       {/* Buttons to Navigate */}

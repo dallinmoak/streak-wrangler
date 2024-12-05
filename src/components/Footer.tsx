@@ -4,15 +4,7 @@ export default function Footer() {
   return (
     <>
       <footer className='bg-plum-900 text-anti-plum-50 p-6 mt-8'>
-        {/* Main Content */}
-        <div className='flex justify-between items-center'>
-          {/* Branding */}
-          <div>
-            <h1 className='font-serif font-bold text-3xl'>I see you!</h1>
-            <h2 className='text-lg font-light'>Flavor text tastes like spray cheese.</h2>
-          </div>
-
-          {/* Quick Links or Navigation */}
+        {/* <div className='flex justify-between items-center'>
           <nav className='flex space-x-4'>
             <a
               href="#about"
@@ -43,11 +35,8 @@ export default function Footer() {
               Contact
             </a>
           </nav>
-        </div>
-
-        {/* Social Media or Secondary Links */}
-        <div className='mt-4 flex justify-center space-x-4'>
-          {/* Social Media Placeholder Icons */}
+        </div> */}
+        {/* <div className='mt-4 flex justify-center space-x-4'>
           <a
             href="#twitter"
             className='text-anti-plum-50 hover:text-plum-400 focus:outline-none focus:ring-2 focus:ring-plum-400 rounded'
@@ -69,9 +58,7 @@ export default function Footer() {
           >
             GitHub
           </a>
-        </div>
-
-        {/* Copyright and Fine Print */}
+        </div> */}
         <div className='mt-4 text-center text-sm'>
           <p>&copy; {new Date().getFullYear()} Streak Wrangler. All rights reserved.</p>
         </div>
