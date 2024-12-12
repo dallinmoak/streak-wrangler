@@ -1,15 +1,15 @@
-"use client"; // Specifies the code is for the client side.
+"use client";
 
-import UserContext from "../../lib/context/UserContext";
+import React, { useState } from "react";
+import UserContext from "@/lib/context/UserContext";
 import { User } from "@prisma/client";
 
-// Context provider for sharing the current user object across the app.
-export default function UserProvider({
-  children,
-  user,
-}: {
-  children: any; // Components wrapped by the provider.
-  user: User;    // Current user data.
-}) {
-  return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+export default function UserProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+
+  return (
+    <UserContext.Provider value={{ user, setUser }}>
+      {children}
+    </UserContext.Provider>
+  );
 }
