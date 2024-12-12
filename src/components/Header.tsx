@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import ShowUser from "./client/ShowUser";
+import UserContext from "@/lib/context/UserContext";
 
 export default function Header() {
+  const { user, setUser } = useContext(UserContext); // Access the user and setUser from context
+
+  const handleSignOut = () => {
+    localStorage.removeItem("token"); // Clear the token
+    setUser(null); // Reset user context
+    window.location.href = "/signin"; // Redirect to sign-in page
+  };
+
   return (
     <>
       <header className="bg-plum-900 text-anti-plum-50 p-6 flex justify-between items-center shadow-lg">
@@ -46,6 +55,16 @@ export default function Header() {
           >
             Settings
           </a>
+
+          {/* Sign Out Button */}
+          {user && (
+            <button
+              onClick={handleSignOut}
+              className="text-anti-plum-50 hover:text-plum-400 focus:outline-none focus:ring-2 focus:ring-plum-400 rounded"
+            >
+              Sign Out
+            </button>
+          )}
         </nav>
       </header>
     </>
