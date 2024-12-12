@@ -1,15 +1,14 @@
-// File: src/app/signin/page.tsx
-
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useRouter } from "next/navigation";
+import UserContext from "@/lib/context/UserContext";
 
 export default function SignInPage() {
-  const [loginData, setLoginData] = useState({
-    username: "",
-    password: "",
-  });
+  const [loginData, setLoginData] = useState({ username: "", password: "" });
   const [message, setMessage] = useState("");
+  const { setUser } = useContext(UserContext); // Access `setUser` from context to update user data
+  const router = useRouter(); // To redirect after login
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -18,81 +17,65 @@ export default function SignInPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(loginData),
-    });
-
-    const rawResponse = await res.text();
-    console.log("Raw response:", rawResponse);
 
     try {
-      const result = JSON.parse(rawResponse);
+      // Send login request to the API
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(loginData),
+      });
+
+      const result = await res.json();
+
       if (res.ok) {
         setMessage("Login successful!");
-        localStorage.setItem("token", result.token);
+        localStorage.setItem("token", result.token); // Store JWT token
+
+        // Fetch user data with the token
+        const userRes = await fetch("/api/user/me", {
+          headers: {
+            Authorization: `Bearer ${result.token}`,
+          },
+        });
+        const userData = await userRes.json();
+
+        if (userRes.ok) {
+          setUser(userData); // Update user context with fetched data
+          router.push("/"); // Redirect to the home page or dashboard
+        } else {
+          setMessage("Failed to fetch user data.");
+        }
       } else {
         setMessage(`Login failed: ${result.error}`);
       }
     } catch (err) {
-      console.error("Error parsing JSON:", err);
-      setMessage("Failed to parse server response.");
+      console.error("Login error:", err);
+      setMessage("An unexpected error occurred.");
     }
   };
 
   return (
     <div className="bg-plum-100 min-h-screen flex flex-col items-center justify-start text-plum-900 p-6">
       <h1 className="text-3xl font-bold font-serif mb-6">Sign In</h1>
-
-      {/* Message Section */}
-      {message && (
-        <div className="mb-4 p-4 bg-plum-200 text-plum-900 rounded shadow-md">
-          {message}
-        </div>
-      )}
-
-      {/* Sign In Form */}
-      <form
-        onSubmit={handleLogin}
-        className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg space-y-4"
-      >
+      {message && <div>{message}</div>}
+      <form onSubmit={handleLogin}>
         <input
           type="text"
           name="username"
-          placeholder="Username"
           value={loginData.username}
           onChange={handleInputChange}
-          required
-          className="w-full p-3 border border-gray-300 rounded text-plum-900 focus:outline-none focus:ring-2 focus:ring-plum-400"
+          placeholder="Username"
         />
         <input
           type="password"
           name="password"
-          placeholder="Password"
           value={loginData.password}
           onChange={handleInputChange}
-          required
-          className="w-full p-3 border border-gray-300 rounded text-plum-900 focus:outline-none focus:ring-2 focus:ring-plum-400"
+          placeholder="Password"
         />
-        <button
-          type="submit"
-          className="w-full px-4 py-3 bg-plum-500 text-white rounded shadow-md hover:bg-plum-600 focus:outline-none focus:ring-4 focus:ring-plum-400"
-        >
-          Sign In
-        </button>
+        <button type="submit">Sign In</button>
       </form>
-
-      {/* Link to Sign Up Page */}
-      <p className="mt-6 text-sm">
-        Don’t have an account?{" "}
-        <a
-          href="/signup"
-          className="text-plum-600 hover:underline focus:outline-none focus:ring-2 focus:ring-plum-400"
-        >
-          Sign Up
-        </a>
-      </p>
     </div>
   );
 }
