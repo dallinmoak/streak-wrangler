@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useContext } from "react";
 import ShowUser from "./client/ShowUser";
 import UserContext from "@/lib/context/UserContext";
@@ -8,7 +10,7 @@ export default function Header() {
   const handleSignOut = () => {
     localStorage.removeItem("token"); // Clear the token
     setUser(null); // Reset user context
-    window.location.href = "/signin"; // Redirect to sign-in page
+    window.location.href = "/profile/signin"; // Redirect to sign-in page
   };
 
   return (
