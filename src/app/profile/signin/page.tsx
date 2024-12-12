@@ -7,8 +7,8 @@ import UserContext from "@/lib/context/UserContext";
 export default function SignInPage() {
   const [loginData, setLoginData] = useState({ username: "", password: "" });
   const [message, setMessage] = useState("");
-  const { setUser } = useContext(UserContext); // Access `setUser` from context to update user data
-  const router = useRouter(); // To redirect after login
+  const { setUser } = useContext(UserContext);
+  const router = useRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -41,8 +41,8 @@ export default function SignInPage() {
         const userData = await userRes.json();
 
         if (userRes.ok) {
-          setUser(userData); // Update user context with fetched data
-          router.push("/"); // Redirect to the home page or dashboard
+          setUser(userData);
+          router.push("/");
         } else {
           setMessage("Failed to fetch user data.");
         }
@@ -58,24 +58,55 @@ export default function SignInPage() {
   return (
     <div className="bg-plum-100 min-h-screen flex flex-col items-center justify-start text-plum-900 p-6">
       <h1 className="text-3xl font-bold font-serif mb-6">Sign In</h1>
-      {message && <div>{message}</div>}
-      <form onSubmit={handleLogin}>
+
+      {/* Message Section */}
+      {message && (
+        <div className="mb-4 p-4 bg-plum-200 text-plum-900 rounded shadow-md">
+          {message}
+        </div>
+      )}
+
+      {/* Sign In Form */}
+      <form
+        onSubmit={handleLogin}
+        className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg space-y-4"
+      >
         <input
           type="text"
           name="username"
+          placeholder="Username"
           value={loginData.username}
           onChange={handleInputChange}
-          placeholder="Username"
+          required
+          className="w-full p-3 border border-gray-300 rounded text-plum-900 focus:outline-none focus:ring-2 focus:ring-plum-400"
         />
         <input
           type="password"
           name="password"
+          placeholder="Password"
           value={loginData.password}
           onChange={handleInputChange}
-          placeholder="Password"
+          required
+          className="w-full p-3 border border-gray-300 rounded text-plum-900 focus:outline-none focus:ring-2 focus:ring-plum-400"
         />
-        <button type="submit">Sign In</button>
+        <button
+          type="submit"
+          className="w-full px-4 py-3 bg-plum-500 text-white rounded shadow-md hover:bg-plum-600 focus:outline-none focus:ring-4 focus:ring-plum-400"
+        >
+          Sign In
+        </button>
       </form>
+
+      {/* Link to Sign Up Page */}
+      <p className="mt-6 text-sm">
+        Don’t have an account?{" "}
+        <a
+          href="/signup"
+          className="text-plum-600 hover:underline focus:outline-none focus:ring-2 focus:ring-plum-400"
+        >
+          Sign Up
+        </a>
+      </p>
     </div>
   );
 }
