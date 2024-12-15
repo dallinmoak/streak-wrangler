@@ -6,7 +6,6 @@ const getCurrent = async () => {
   const cookie = cookies().get("token")?.value;
 
   // Log all cookies received on the server
-  console.log("All Cookies:", cookies().getAll());
 
   // Log if the specific token cookie is missing
   if (!cookie) {
@@ -24,7 +23,6 @@ const getCurrent = async () => {
       where: { id: decoded.userId },
     });
 
-    console.log("Fetched User:", user); // Log the fetched user
     return user ?? null;
   } catch (error) {
     console.error("JWT Verification or Database Error:", error);

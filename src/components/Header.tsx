@@ -1,5 +1,6 @@
 import React from "react";
 import ShowUser from "./client/ShowUser";
+import LogoutButton from "../components/client/logoutbutton";
 
 export default function Header() {
   return (
@@ -46,6 +47,7 @@ export default function Header() {
           >
             Settings
           </a>
+          <LogoutButton />
         </nav>
       </header>
     </>
