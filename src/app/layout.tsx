@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   try {
     const cookieHeader = cookies().get("token")?.value; // Retrieve token cookie
-    const user = cookieHeader ? await getCurrent(cookieHeader) : null;
+    const user = cookieHeader ? await getCurrent() : null;
 
     return (
       <html lang="en">
