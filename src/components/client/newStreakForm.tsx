@@ -59,6 +59,7 @@ export default function NewStreakForm() {
     const workingFieldSets = [...fieldSets];
     workingFieldSets.splice(index, 1);
     setFieldSets(workingFieldSets);
+    //useless change
   }
 
   const currentUserId = useContext(UserContext)?.id;
