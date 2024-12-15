@@ -14,7 +14,7 @@ export default async function StreakList() {
       <div className="text-center">
         <p className="text-gray-500">Please sign in to view your streaks.</p>
         <Link
-          href="/signin"
+          href="/profile/signin"
           className="text-plum-500 underline hover:text-plum-700"
         >
           Sign In
