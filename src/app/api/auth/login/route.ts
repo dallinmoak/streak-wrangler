@@ -1,4 +1,3 @@
-// File: src/app/api/auth/login/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import prisma from "@/lib/prisma";
@@ -27,7 +26,14 @@ export async function POST(req: NextRequest) {
       { expiresIn: "1h" }
     );
 
-    return NextResponse.json({ token, message: "Login successful!" }, { status: 200 });
+    // Set the token as an HTTP-only cookie
+    const response = NextResponse.json({ message: "Login successful!" });
+    response.headers.set(
+      "Set-Cookie",
+      `token=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=3600`
+    );
+
+    return response;
   } catch (error) {
     console.error("Login error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

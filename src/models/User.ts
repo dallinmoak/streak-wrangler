@@ -2,10 +2,16 @@ import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
 
 const getCurrent = async (cookieHeader: string | undefined) => {
-  if (!cookieHeader) throw new Error("No cookies provided");
+  if (!cookieHeader) {
+    console.warn("No cookies provided");
+    return null; // Return null if no cookies are present
+  }
 
   const tokenMatch = cookieHeader.match(/token=([^;]+)/);
-  if (!tokenMatch) throw new Error("No token found");
+  if (!tokenMatch) {
+    console.warn("No token found in cookies");
+    return null; // Return null if no token is found
+  }
 
   const token = tokenMatch[1];
 
@@ -20,11 +26,14 @@ const getCurrent = async (cookieHeader: string | undefined) => {
       where: { id: decoded.userId },
     });
 
-    if (!user) throw new Error("User not found");
+    if (!user) {
+      console.warn("User not found");
+      return null;
+    }
     return user;
   } catch (error) {
     console.error("Failed to decode or find user:", error);
-    throw new Error("Invalid or expired token");
+    return null; // Return null on token verification failure
   }
 };
 

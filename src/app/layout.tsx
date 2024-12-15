@@ -13,20 +13,31 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const cookieHeader = cookies().get("token")?.value; // Extract token from cookies
-  const user = cookieHeader ? await getCurrent(cookieHeader) : null;
+  try {
+    const cookieHeader = cookies().get("token")?.value; // Retrieve token cookie
+    const user = cookieHeader ? await getCurrent(cookieHeader) : null;
 
-  return (
-    <html lang="en">
-      <body className="antialiased font-[family-name:var(--font-main-sans)] layout-body">
-        <UserProvider user={user}>
-          <div className="container mx-auto min-h-[100dvh] layout-container h-fit flex flex-col justify-between">
-            <Header />
-            <div className="flex-grow">{children}</div>
-            <Footer />
-          </div>
-        </UserProvider>
-      </body>
-    </html>
-  );
+    return (
+      <html lang="en">
+        <body className="antialiased font-[family-name:var(--font-main-sans)] layout-body">
+          <UserProvider user={user}>
+            <div className="container mx-auto min-h-[100dvh] layout-container h-fit flex flex-col justify-between">
+              <Header />
+              <div className="flex-grow">{children}</div>
+              <Footer />
+            </div>
+          </UserProvider>
+        </body>
+      </html>
+    );
+  } catch (error) {
+    console.error("Error in RootLayout:", error);
+    return (
+      <html lang="en">
+        <body>
+          <h1>Something went wrong</h1>
+        </body>
+      </html>
+    );
+  }
 }
