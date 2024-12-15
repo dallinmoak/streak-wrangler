@@ -19,8 +19,9 @@ export default function Header() {
         {/* Branding */}
         <div>
           <h1 className="font-serif font-bold text-3xl">Streak Wrangler</h1>
-          <ShowUser property="name" />
-          <h2 className="text-lg font-light">Hi, folks! Welcome to the app!</h2>
+          <h2 className="text-lg font-light">
+            {user ? `Welcome, ${user.name}!` : "Welcome, Guest!"}
+          </h2>
         </div>
 
         {/* Navigation or utility section */}
