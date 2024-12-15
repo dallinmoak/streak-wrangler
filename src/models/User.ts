@@ -1,39 +1,34 @@
-import prisma from "@/lib/prisma";
+import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
+import prisma from "@/lib/prisma"; // Assuming Prisma is set up to interact with your database
 
-const getCurrent = async (cookieHeader: string | undefined) => {
-  if (!cookieHeader) {
-    console.warn("No cookies provided");
-    return null; // Return null if no cookies are present
+const getCurrent = async () => {
+  const cookie = cookies().get("token")?.value;
+
+  // Log all cookies received on the server
+  console.log("All Cookies:", cookies().getAll());
+
+  // Log if the specific token cookie is missing
+  if (!cookie) {
+    console.log("No token cookie found");
+    return null;
   }
-
-  const tokenMatch = cookieHeader.match(/token=([^;]+)/);
-  if (!tokenMatch) {
-    console.warn("No token found in cookies");
-    return null; // Return null if no token is found
-  }
-
-  const token = tokenMatch[1];
 
   try {
-    // Decode the token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {
+    const decoded = jwt.verify(cookie, process.env.JWT_SECRET as string) as {
       userId: string;
     };
 
-    // Fetch the user
+    // Fetch the user from the database using the decoded userId
     const user = await prisma.user.findUnique({
       where: { id: decoded.userId },
     });
 
-    if (!user) {
-      console.warn("User not found");
-      return null;
-    }
-    return user;
+    console.log("Fetched User:", user); // Log the fetched user
+    return user ?? null;
   } catch (error) {
-    console.error("Failed to decode or find user:", error);
-    return null; // Return null on token verification failure
+    console.error("JWT Verification or Database Error:", error);
+    return null;
   }
 };
 
