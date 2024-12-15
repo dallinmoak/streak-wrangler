@@ -1,13 +1,13 @@
 import { jwtDecode } from "jwt-decode";
 
-
 interface TokenPayload {
   userId: string;
   username: string;
-  name: string;
 }
 
 export const getDecodedToken = (): TokenPayload | null => {
+  if (typeof window === "undefined") return null; // Ensure code runs on the client
+
   const token = localStorage.getItem("token");
   if (!token) return null;
 
