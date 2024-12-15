@@ -12,7 +12,11 @@ export const metadata: Metadata = {
   description: "This is the application",
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const user = await getCurrentUser();
   return (
     <html lang="en">
@@ -23,15 +27,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         font-[family-name:var(--font-main-sans)]
         layout-body`}
       >
-        <UserProvider user={user}>
-          <div className="container mx-auto min-h-[100dvh] layout-container h-fit flex flex-col justify-between">
+        <div className="container mx-auto min-h-[100dvh] layout-container h-fit flex flex-col justify-between">
+          <UserProvider user={user}>
             <Header />
-            <div className="flex-grow">
-              {children}
-            </div>
-            <Footer />
-          </div>
-        </UserProvider>
+          </UserProvider>
+          <div className="flex-grow">{children}</div>
+          <Footer />
+        </div>
       </body>
     </html>
   );
