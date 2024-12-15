@@ -6,7 +6,7 @@ import { getCurrent as getCurrentUser } from "@/models/User";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { vars as globalFontVars } from "@/lib/global-fonts";
-
+//wake  up vercel
 export const metadata: Metadata = {
   title: "Streak Wrangler app",
   description: "This is the application",
