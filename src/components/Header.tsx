@@ -1,53 +1,63 @@
+"use client";
+
 import React from "react";
-import ShowUser from "./client/ShowUser";
+import { getDecodedToken } from "../scripts/decodeToken"; // Adjust the path to your utility
 
 export default function Header() {
-  return (
-    <>
-      <header className="bg-plum-900 text-anti-plum-50 p-6 flex justify-between items-center shadow-lg">
-        {/* Branding */}
-        <div>
-          <h1 className="font-serif font-bold text-3xl">Streak Wrangler</h1>
-          <ShowUser property="name" />
-          <h2 className="text-lg font-light">Hi, folks! Welcome to the app!</h2>
-        </div>
+  const user = getDecodedToken(); // Decode the token to get user information
 
-        {/* Navigation or utility section */}
-        <nav className="flex space-x-4">
-          {/* Home Button */}
-          <a
-            href="/"
+  const handleSignOut = () => {
+    localStorage.removeItem("token"); // Clear the token
+    window.location.href = "/profile/signin"; // Redirect to sign-in page
+  };
+
+  return (
+    <header className="bg-plum-900 text-anti-plum-50 p-6 flex justify-between items-center shadow-lg">
+      <div>
+        <h1 className="font-serif font-bold text-3xl">Streak Wrangler</h1>
+        <h2 className="text-lg font-light">
+          {user ? `Welcome, ${user.username}!` : "Welcome, Guest!"}
+        </h2>
+      </div>
+
+      <nav className="flex space-x-4">
+        <a
+          href="/"
+          className="text-anti-plum-50 hover:text-plum-400 focus:outline-none focus:ring-2 focus:ring-plum-400 rounded"
+          aria-label="Home"
+        >
+          Home
+        </a>
+        <a
+          href="#streaks"
+          className="text-anti-plum-50 hover:text-plum-400 focus:outline-none focus:ring-2 focus:ring-plum-400 rounded"
+          aria-label="Streaks"
+        >
+          Streaks
+        </a>
+        <a
+          href="/profile"
+          className="text-anti-plum-50 hover:text-plum-400 focus:outline-none focus:ring-2 focus:ring-plum-400 rounded"
+          aria-label="Profile"
+        >
+          Profile
+        </a>
+        <a
+          href="#settings"
+          className="text-anti-plum-50 hover:text-plum-400 focus:outline-none focus:ring-2 focus:ring-plum-400 rounded"
+          aria-label="Settings"
+        >
+          Settings
+        </a>
+        {user && (
+          <button
+            onClick={handleSignOut}
             className="text-anti-plum-50 hover:text-plum-400 focus:outline-none focus:ring-2 focus:ring-plum-400 rounded"
-            aria-label="Home"
           >
-            Home
-          </a>
-          {/* Streaks Button */}
-          <a
-            href="#streaks"
-            className="text-anti-plum-50 hover:text-plum-400 focus:outline-none focus:ring-2 focus:ring-plum-400 rounded"
-            aria-label="Streaks"
-          >
-            Streaks
-          </a>
-          {/* Profile Button */}
-          <a
-            href="/profile"
-            className="text-anti-plum-50 hover:text-plum-400 focus:outline-none focus:ring-2 focus:ring-plum-400 rounded"
-            aria-label="Profile"
-          >
-            Profile
-          </a>
-          {/* Settings Button */}
-          <a
-            href="#settings"
-            className="text-anti-plum-50 hover:text-plum-400 focus:outline-none focus:ring-2 focus:ring-plum-400 rounded"
-            aria-label="Settings"
-          >
-            Settings
-          </a>
-        </nav>
-      </header>
-    </>
+            Sign Out
+          </button>
+        )}
+      </nav>
+    </header>
   );
 }

@@ -1,15 +1,14 @@
-// File: src/app/signin/page.tsx
-
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useRouter } from "next/navigation";
+import UserContext from "@/lib/context/UserContext";
 
 export default function SignInPage() {
-  const [loginData, setLoginData] = useState({
-    username: "",
-    password: "",
-  });
+  const [loginData, setLoginData] = useState({ username: "", password: "" });
   const [message, setMessage] = useState("");
+  const { setUser } = useContext(UserContext);
+  const router = useRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -18,26 +17,41 @@ export default function SignInPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(loginData),
-    });
-
-    const rawResponse = await res.text();
-    console.log("Raw response:", rawResponse);
 
     try {
-      const result = JSON.parse(rawResponse);
+      // Send login request to the API
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(loginData),
+      });
+
+      const result = await res.json();
+
       if (res.ok) {
         setMessage("Login successful!");
-        localStorage.setItem("token", result.token);
+        localStorage.setItem("token", result.token); // Store JWT token
+
+        // Fetch user data with the token
+        const userRes = await fetch("/api/user/me", {
+          headers: {
+            Authorization: `Bearer ${result.token}`,
+          },
+        });
+        const userData = await userRes.json();
+
+        if (userRes.ok) {
+          setUser(userData);
+          router.push("/");
+        } else {
+          setMessage("Failed to fetch user data.");
+        }
       } else {
         setMessage(`Login failed: ${result.error}`);
       }
     } catch (err) {
-      console.error("Error parsing JSON:", err);
-      setMessage("Failed to parse server response.");
+      console.error("Login error:", err);
+      setMessage("An unexpected error occurred.");
     }
   };
 
