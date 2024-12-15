@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default async function StreakList() {
   const cookieHeader = cookies().get("token")?.value; // Retrieve the token cookie
-  const user = await getCurrentUser(cookieHeader);
+  const user = await getCurrentUser();
 
   // Handle unauthenticated users
   if (!user) {
